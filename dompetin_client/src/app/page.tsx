@@ -1,6 +1,18 @@
+'use client'
 import Image from "next/image";
+import { useState } from "react";
 
 export default function Home() {
+  const [num,setNum]=useState(0)
+  const increment=()=>{
+    setNum(num+1)
+  }
+  function decrement(){
+    setNum(num-1)
+  }
+  function reset(){
+    setNum(0)
+  }
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
@@ -49,6 +61,12 @@ export default function Home() {
           >
             Read our docs
           </a>
+        </div>
+        <h1>{num}</h1>
+        <div className="">
+        <button onClick={()=>decrement()} >-</button>
+        <button onClick={reset} >Reset</button>
+        <button className="bg-amber-500" onClick={()=>increment()} >+</button>
         </div>
       </main>
       <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
