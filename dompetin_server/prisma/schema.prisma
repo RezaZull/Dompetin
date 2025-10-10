@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum transaction_type {
+  INCOME
+  EXPENCES
+  TRANSFER
+}
+
+model m_user {
+  id                     BigInt                   @id @default(autoincrement())
+  name                   String
+  username               String                   @unique
+  email                  String                   @unique
+  password               String
+  phone                  String
+  m_account              m_account[]
+  user_setting           user_setting[]
+  m_transaction_category m_transaction_category[]
+  t_transaction          t_transaction[]
+  created                DateTime                 @default(now())
+  updated                DateTime?
+  deleted                DateTime?
+}
+
+model m_account {
+  id              BigInt          @id @default(autoincrement())
+  name            String
+  balance         BigInt
+  account_nummber Int
+  m_user          m_user          @relation(fields: [id_m_user], references: [id])
+  id_m_user       BigInt
+  t_transaction   t_transaction[]
+  created         DateTime        @default(now())
+  updated         DateTime?
+  deleted         DateTime?
+}
+
+model user_setting {
+  id          BigInt    @id @default(autoincrement())
+  m_user      m_user    @relation(fields: [id_m_user], references: [id])
+  id_m_user   BigInt
+  email_notif Boolean   @default(false)
+  tele_notif  Boolean   @default(false)
+  created     DateTime  @default(now())
+  updated     DateTime?
+  deleted     DateTime?
+}
+
+model m_transaction_category {
+  id            BigInt           @id @default(autoincrement())
+  m_user        m_user           @relation(fields: [id_m_user], references: [id])
+  id_m_user     BigInt
+  name          String
+  type          transaction_type
+  t_transaction t_transaction[]
+  created       DateTime         @default(now())
+  updated       DateTime?
+  deleted       DateTime?
+}
+
+model t_transaction {
+  id                        BigInt                 @id @default(autoincrement())
+  m_user                    m_user                 @relation(fields: [id_m_user], references: [id])
+  id_m_user                 BigInt
+  m_account                 m_account              @relation(fields: [id_m_account], references: [id])
+  id_m_account              BigInt
+  m_transaction_category    m_transaction_category @relation(fields: [id_m_transaction_category], references: [id])
+  id_m_transaction_category BigInt
+  datetime                  DateTime               @default(now())
+  type                      transaction_type
+  nominal                   BigInt
+  created                   DateTime               @default(now())
+  updated                   DateTime?
+  deleted                   DateTime?
+}
