@@ -20,6 +20,12 @@ enum transaction_type {
   TRANSFER
 }
 
+enum limitPeriod {
+  DAILY
+  MONTHLY
+  YEARLY
+}
+
 model m_user {
   id                     BigInt                   @id @default(autoincrement())
   name                   String
@@ -50,14 +56,16 @@ model m_account {
 }
 
 model user_setting {
-  id          BigInt    @id @default(autoincrement())
-  m_user      m_user    @relation(fields: [id_m_user], references: [id])
-  id_m_user   BigInt
-  email_notif Boolean   @default(false)
-  tele_notif  Boolean   @default(false)
-  created     DateTime  @default(now())
-  updated     DateTime?
-  deleted     DateTime?
+  id             BigInt      @id @default(autoincrement())
+  m_user         m_user      @relation(fields: [id_m_user], references: [id])
+  id_m_user      BigInt
+  email_notif    Boolean     @default(false)
+  tele_notif     Boolean     @default(false)
+  limit_period   limitPeriod @default(DAILY)
+  spending_limit BigInt
+  created        DateTime    @default(now())
+  updated        DateTime?
+  deleted        DateTime?
 }
 
 model m_transaction_category {
