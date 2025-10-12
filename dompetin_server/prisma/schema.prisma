@@ -6,7 +6,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -29,8 +29,8 @@ enum limitPeriod {
 model m_user {
   id                     BigInt                   @id @default(autoincrement())
   name                   String
-  username               String                   @unique
-  email                  String                   @unique
+  username               String
+  email                  String
   password               String
   phone                  String
   m_account              m_account[]
@@ -46,7 +46,7 @@ model m_account {
   id              BigInt          @id @default(autoincrement())
   name            String
   balance         BigInt
-  account_nummber Int
+  account_nummber String
   m_user          m_user          @relation(fields: [id_m_user], references: [id])
   id_m_user       BigInt
   t_transaction   t_transaction[]
