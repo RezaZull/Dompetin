@@ -2,36 +2,92 @@ import { Injectable } from '@nestjs/common';
 import { CreateMAccountDto } from './dto/create-m_account.dto';
 import { UpdateMAccountDto } from './dto/update-m_account.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
+import {
+  responseHelper,
+  responseStatus,
+} from 'src/utils/helper/responseHelper';
 
 @Injectable()
 export class MAccountService {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(createMAccountDto: CreateMAccountDto) {
-    return this.prisma.m_account.create({
+  async create(createMAccountDto: CreateMAccountDto) {
+    const prismaRes = await this.prisma.m_account.create({
       data: createMAccountDto,
     });
+    if (prismaRes) {
+      return responseHelper.response(
+        responseStatus.CREATED,
+        true,
+        'Successfully create data',
+        prismaRes,
+      );
+    } else {
+      return responseHelper.response(
+        responseStatus.BAD_REQUEST,
+        false,
+        'Failed create data',
+        null,
+      );
+    }
   }
 
-  findAll() {
-    return this.prisma.m_account.findMany({ where: { deleted: null } });
+  async findAll() {
+    const prismaRes = await this.prisma.m_account.findMany({
+      where: { deleted: null },
+    });
+    return responseHelper.response(
+      responseStatus.OK,
+      true,
+      'Successfully get data',
+      prismaRes,
+    );
   }
 
-  findOne(id: number) {
-    return this.prisma.m_account.findUnique({ where: { id, deleted: null } });
+  async findOne(id: number) {
+    const prismaRes = await this.prisma.m_account.findUnique({
+      where: { id, deleted: null },
+    });
+    return responseHelper.response(
+      responseStatus.OK,
+      true,
+      'Successfully get data',
+      prismaRes,
+    );
   }
 
-  update(id: number, updateMAccountDto: UpdateMAccountDto) {
-    return this.prisma.m_account.update({
+  async update(id: number, updateMAccountDto: UpdateMAccountDto) {
+    const prismaRes = await this.prisma.m_account.update({
       where: { id },
       data: { ...updateMAccountDto, updated: new Date() },
     });
+    if (prismaRes) {
+      return responseHelper.response(
+        responseStatus.OK,
+        true,
+        'Successfully update data',
+        prismaRes,
+      );
+    } else {
+      return responseHelper.response(
+        responseStatus.BAD_REQUEST,
+        false,
+        'Failed update data',
+        null,
+      );
+    }
   }
 
-  remove(id: number) {
-    return this.prisma.m_account.update({
+  async remove(id: number) {
+    const prismaRes = await this.prisma.m_account.update({
       where: { id },
       data: { deleted: new Date() },
     });
+    return responseHelper.response(
+      responseStatus.OK,
+      true,
+      'Successfully delete data',
+      prismaRes,
+    );
   }
 }
