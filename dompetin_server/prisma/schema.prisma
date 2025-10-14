@@ -33,6 +33,8 @@ model m_user {
   email                  String
   password               String
   phone                  String
+  confirm_email          Boolean                  @default(false)
+  confirm_phone          Boolean                  @default(false)
   m_account              m_account[]
   user_setting           user_setting[]
   m_transaction_category m_transaction_category[]

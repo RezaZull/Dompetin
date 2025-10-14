@@ -21,4 +21,20 @@ export const responseHelper = {
       data,
     };
   },
+  responseJWT: (
+    status: responseStatus,
+    success: boolean,
+    message: string,
+    data: any,
+    access_token: string,
+  ) => {
+    return {
+      status,
+      success,
+      message,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      data,
+      access_token,
+    };
+  },
 };

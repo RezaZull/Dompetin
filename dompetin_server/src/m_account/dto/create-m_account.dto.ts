@@ -1,5 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsDefined, IsString } from 'class-validator';
+import { Relation } from 'src/utils/validates/relation.validate';
 
 export class CreateMAccountDto {
   @IsString()
@@ -11,5 +12,6 @@ export class CreateMAccountDto {
   account_nummber: string;
   @Transform(({ value }) => BigInt(value as string))
   @IsDefined()
+  @Relation({ tableName: 'm_user', column: 'id' })
   id_m_user: bigint;
 }
