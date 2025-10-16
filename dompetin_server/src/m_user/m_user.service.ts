@@ -1,12 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  Injectable,
+} from '@nestjs/common';
 import { CreateMUserDto } from './dto/create-m_user.dto';
 import { UpdateMUserDto } from './dto/update-m_user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { hash } from 'bcrypt';
-import {
-  responseHelper,
-  responseStatus,
-} from 'src/utils/helper/responseHelper';
 
 @Injectable()
 export class MUserService {
@@ -17,19 +17,9 @@ export class MUserService {
       data: { ...createMUserDto, password: hashPassword },
     });
     if (prismaRes) {
-      return responseHelper.response(
-        responseStatus.CREATED,
-        true,
-        'Successfully create data',
-        prismaRes,
-      );
+      return prismaRes;
     } else {
-      return responseHelper.response(
-        responseStatus.BAD_REQUEST,
-        false,
-        'Failed create data',
-        null,
-      );
+      return new BadGatewayException('Failed create data');
     }
   }
 
@@ -38,12 +28,7 @@ export class MUserService {
       where: { deleted: null },
       omit: { password: true },
     });
-    return responseHelper.response(
-      responseStatus.OK,
-      true,
-      'Successfully get data',
-      prismaRes,
-    );
+    return prismaRes;
   }
 
   async findOne(id: number) {
@@ -51,12 +36,7 @@ export class MUserService {
       where: { id: id, deleted: null },
       omit: { password: true },
     });
-    return responseHelper.response(
-      responseStatus.OK,
-      true,
-      'Successfully get data',
-      prismaRes,
-    );
+    return prismaRes;
   }
 
   async update(id: number, updateMUserDto: UpdateMUserDto) {
@@ -69,19 +49,9 @@ export class MUserService {
       data: { ...updateMUserDto, password: hashPassword, updated: new Date() },
     });
     if (prismaRes) {
-      return responseHelper.response(
-        responseStatus.OK,
-        true,
-        'Successfully update data',
-        prismaRes,
-      );
+      return prismaRes;
     } else {
-      return responseHelper.response(
-        responseStatus.BAD_REQUEST,
-        false,
-        'Failed update data',
-        null,
-      );
+      return new BadRequestException('Failed update data');
     }
   }
 
@@ -90,11 +60,6 @@ export class MUserService {
       where: { id },
       data: { deleted: new Date() },
     });
-    return responseHelper.response(
-      responseStatus.OK,
-      true,
-      'Successfully delete data',
-      prismaRes,
-    );
+    return prismaRes;
   }
 }

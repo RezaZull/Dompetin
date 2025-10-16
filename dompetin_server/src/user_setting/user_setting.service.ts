@@ -18,14 +18,12 @@ export class UserSettingService {
     if (prismaRes) {
       return responseHelper.response(
         responseStatus.CREATED,
-        true,
         'Successfully create data',
         prismaRes,
       );
     } else {
       return responseHelper.response(
         responseStatus.BAD_REQUEST,
-        false,
         'Failed create data',
         null,
       );
@@ -39,7 +37,6 @@ export class UserSettingService {
 
     return responseHelper.response(
       responseStatus.OK,
-      true,
       'Successfully get data',
       prismaRes,
     );
@@ -52,7 +49,6 @@ export class UserSettingService {
 
     return responseHelper.response(
       responseStatus.OK,
-      true,
       'Successfully get data',
       prismaRes,
     );
@@ -66,14 +62,12 @@ export class UserSettingService {
     if (prismaRes) {
       return responseHelper.response(
         responseStatus.OK,
-        true,
         'Successfully update data',
         prismaRes,
       );
     } else {
       return responseHelper.response(
         responseStatus.BAD_REQUEST,
-        false,
         'Failed update data',
         null,
       );
@@ -90,7 +84,6 @@ export class UserSettingService {
 
     return responseHelper.response(
       responseStatus.OK,
-      true,
       'Successfully delete data',
       prismaRes,
     );

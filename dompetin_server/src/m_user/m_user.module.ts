@@ -7,5 +7,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [MUserController],
   providers: [MUserService],
+  exports: [MUserService],
 })
 export class MUserModule {}

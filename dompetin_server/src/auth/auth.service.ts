@@ -1,18 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { loginDTO } from './dto/login.dto';
 import { compare } from 'bcrypt';
-import {
-  responseStatus,
-  responseHelper,
-} from 'src/utils/helper/responseHelper';
 import { registerDTO } from './dto/register.dto';
 import { JwtService } from '@nestjs/jwt';
+import { MUserService } from 'src/m_user/m_user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
+    private readonly userService: MUserService,
     private readonly jwtService: JwtService,
   ) {}
   async login(loginDTO: loginDTO) {
@@ -34,32 +36,20 @@ export class AuthService {
           username: dataUser.username,
           sub: dataUser.id,
         });
-        return responseHelper.responseJWT(
-          responseStatus.OK,
-          true,
-          'success login',
-          null,
-          access_token,
-        );
+        return access_token;
       } else {
-        return responseHelper.response(
-          responseStatus.UNAUTHORIZED,
-          false,
-          'wrong password ',
-          null,
-        );
+        return new UnauthorizedException('wrong password');
       }
     } else {
-      return responseHelper.response(
-        responseStatus.UNAUTHORIZED,
-        true,
-        'username or email not found',
-        null,
-      );
+      return new UnauthorizedException('username or email not found');
     }
   }
-  register(registerDTO: registerDTO) {
-    return registerDTO;
+  async register(registerDTO: registerDTO) {
+    if (registerDTO.password != registerDTO.password_confirm) {
+      return new BadRequestException('Password and Password Confirm not same');
+    }
+    const newUser = await this.userService.create(registerDTO);
+    return newUser;
   }
   confirmEmail() {
     return 'confirm email';

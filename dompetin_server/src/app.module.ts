@@ -10,7 +10,15 @@ import { TTransactionModule } from './t_transaction/t_transaction.module';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [PrismaModule, MUserModule, MAccountModule, UserSettingModule, MTrasactionCategoryModule, TTransactionModule, AuthModule],
+  imports: [
+    PrismaModule,
+    MUserModule,
+    MAccountModule,
+    UserSettingModule,
+    MTrasactionCategoryModule,
+    TTransactionModule,
+    AuthModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

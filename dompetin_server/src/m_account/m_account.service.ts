@@ -1,11 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, Injectable } from '@nestjs/common';
 import { CreateMAccountDto } from './dto/create-m_account.dto';
 import { UpdateMAccountDto } from './dto/update-m_account.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
-import {
-  responseHelper,
-  responseStatus,
-} from 'src/utils/helper/responseHelper';
 
 @Injectable()
 export class MAccountService {
@@ -16,19 +12,9 @@ export class MAccountService {
       data: createMAccountDto,
     });
     if (prismaRes) {
-      return responseHelper.response(
-        responseStatus.CREATED,
-        true,
-        'Successfully create data',
-        prismaRes,
-      );
+      return prismaRes;
     } else {
-      return responseHelper.response(
-        responseStatus.BAD_REQUEST,
-        false,
-        'Failed create data',
-        null,
-      );
+      return new BadGatewayException('Failed create data');
     }
   }
 
@@ -36,24 +22,14 @@ export class MAccountService {
     const prismaRes = await this.prisma.m_account.findMany({
       where: { deleted: null },
     });
-    return responseHelper.response(
-      responseStatus.OK,
-      true,
-      'Successfully get data',
-      prismaRes,
-    );
+    return prismaRes;
   }
 
   async findOne(id: number) {
     const prismaRes = await this.prisma.m_account.findUnique({
       where: { id, deleted: null },
     });
-    return responseHelper.response(
-      responseStatus.OK,
-      true,
-      'Successfully get data',
-      prismaRes,
-    );
+    return prismaRes;
   }
 
   async update(id: number, updateMAccountDto: UpdateMAccountDto) {
@@ -62,19 +38,9 @@ export class MAccountService {
       data: { ...updateMAccountDto, updated: new Date() },
     });
     if (prismaRes) {
-      return responseHelper.response(
-        responseStatus.OK,
-        true,
-        'Successfully update data',
-        prismaRes,
-      );
+      return prismaRes;
     } else {
-      return responseHelper.response(
-        responseStatus.BAD_REQUEST,
-        false,
-        'Failed update data',
-        null,
-      );
+      return new BadGatewayException('Failed update data');
     }
   }
 
@@ -83,11 +49,6 @@ export class MAccountService {
       where: { id },
       data: { deleted: new Date() },
     });
-    return responseHelper.response(
-      responseStatus.OK,
-      true,
-      'Successfully delete data',
-      prismaRes,
-    );
+    return prismaRes;
   }
 }

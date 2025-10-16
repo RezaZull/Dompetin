@@ -12,6 +12,10 @@ import { MAccountService } from './m_account.service';
 import { CreateMAccountDto } from './dto/create-m_account.dto';
 import { UpdateMAccountDto } from './dto/update-m_account.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import {
+  responseHelper,
+  responseStatus,
+} from 'src/utils/helper/responseHelper';
 
 @Controller('api/m-account')
 export class MAccountController {
@@ -19,8 +23,15 @@ export class MAccountController {
 
   @UseGuards(AuthGuard)
   @Post()
-  create(@Body() createMAccountDto: CreateMAccountDto) {
-    return this.mAccountService.create(createMAccountDto);
+  async create(@Body() createMAccountDto: CreateMAccountDto) {
+    const res = await this.mAccountService.create(createMAccountDto);
+    if (!res) {
+      return responseHelper.response(
+        responseStatus.OK,
+        'Successfully create data',
+        res,
+      );
+    }
   }
 
   @UseGuards(AuthGuard)

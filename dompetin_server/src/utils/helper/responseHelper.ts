@@ -7,15 +7,10 @@ export enum responseStatus {
 }
 
 export const responseHelper = {
-  response: (
-    status: responseStatus,
-    success: boolean,
-    message: string,
-    data: any,
-  ) => {
+  response: (status: responseStatus, message: string, data: any) => {
     return {
       status,
-      success,
+      success: true,
       message,
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       data,

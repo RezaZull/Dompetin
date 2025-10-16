@@ -4,9 +4,11 @@ import { AuthController } from './auth.controller';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { MUserModule } from 'src/m_user/m_user.module';
 
 @Module({
   imports: [
+    MUserModule,
     PrismaModule,
     JwtModule.register({
       global: true,

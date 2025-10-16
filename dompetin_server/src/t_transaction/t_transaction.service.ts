@@ -17,14 +17,12 @@ export class TTransactionService {
     if (prismaRes) {
       return responseHelper.response(
         responseStatus.CREATED,
-        true,
         'Successfully create data',
         prismaRes,
       );
     } else {
       return responseHelper.response(
         responseStatus.OK,
-        false,
         'Failed create data',
         null,
       );
@@ -37,7 +35,6 @@ export class TTransactionService {
     });
     return responseHelper.response(
       responseStatus.OK,
-      true,
       'Successfully get data',
       prismaRes,
     );
@@ -49,7 +46,6 @@ export class TTransactionService {
     });
     return responseHelper.response(
       responseStatus.OK,
-      true,
       'Successfully get data',
       prismaRes,
     );
@@ -66,14 +62,12 @@ export class TTransactionService {
     if (prismaRes) {
       return responseHelper.response(
         responseStatus.OK,
-        true,
         'Successfully update data',
         prismaRes,
       );
     } else {
       return responseHelper.response(
         responseStatus.BAD_REQUEST,
-        false,
         'Successfully get data',
         null,
       );
@@ -90,7 +84,6 @@ export class TTransactionService {
 
     return responseHelper.response(
       responseStatus.OK,
-      true,
       'Successfully delete data',
       prismaRes,
     );
