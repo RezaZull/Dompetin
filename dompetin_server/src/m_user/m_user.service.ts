@@ -39,6 +39,16 @@ export class MUserService {
     return prismaRes;
   }
 
+  async findByEmailOrUsername(emailOrUsername: string) {
+    const prismaRes = await this.prisma.m_user.findFirst({
+      where: {
+        deleted: null,
+        OR: [{ username: emailOrUsername }, { email: emailOrUsername }],
+      },
+    });
+    return prismaRes;
+  }
+
   async update(id: number, updateMUserDto: UpdateMUserDto) {
     const hashPassword = (
       await hash(updateMUserDto.password as string, 10)

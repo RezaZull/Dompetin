@@ -1,3 +1,3 @@
-export const jwtConstants = {
+export const JWT_CONFIG = {
   secret: '**UIIAIUIIAI**',
 };

@@ -1,60 +1,53 @@
-import {
-  BadRequestException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { loginDTO } from './dto/login.dto';
-import { compare } from 'bcrypt';
-import { registerDTO } from './dto/register.dto';
-import { JwtService } from '@nestjs/jwt';
 import { MUserService } from 'src/m_user/m_user.service';
+import { compare } from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
+
+type AuthResult = { accessToken: string; userId: bigint; username: string };
+type SignInData = { userId: bigint; username: string };
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly userService: MUserService,
-    private readonly jwtService: JwtService,
+    private muserService: MUserService,
+    private jwtService: JwtService,
   ) {}
-  async login(loginDTO: loginDTO) {
-    const dataUser = await this.prisma.m_user.findFirst({
-      where: {
-        deleted: null,
-        OR: [{ username: loginDTO.username }, { email: loginDTO.username }],
-      },
-      select: {
-        id: true,
-        username: true,
-        password: true,
-      },
-    });
-    if (dataUser) {
-      const isMatch = await compare(loginDTO.password, dataUser.password);
-      if (isMatch) {
-        const access_token = await this.jwtService.signAsync({
-          username: dataUser.username,
-          sub: dataUser.id,
-        });
-        return access_token;
-      } else {
-        return new UnauthorizedException('wrong password');
-      }
-    } else {
-      return new UnauthorizedException('username or email not found');
+
+  async authenticate(loginDTO: loginDTO): Promise<AuthResult> {
+    const dataUser = await this.validateUser(loginDTO);
+    if (!dataUser) {
+      throw new UnauthorizedException();
     }
+    return await this.signIn(dataUser);
   }
-  async register(registerDTO: registerDTO) {
-    if (registerDTO.password != registerDTO.password_confirm) {
-      return new BadRequestException('Password and Password Confirm not same');
+
+  async validateUser(loginDTO: loginDTO): Promise<SignInData | null> {
+    const userData = await this.muserService.findByEmailOrUsername(
+      loginDTO.username,
+    );
+    if (
+      userData != null &&
+      (await compare(loginDTO.password, userData.password))
+    ) {
+      return {
+        userId: userData.id,
+        username: userData.username,
+      };
     }
-    const newUser = await this.userService.create(registerDTO);
-    return newUser;
+    return null;
   }
-  confirmEmail() {
-    return 'confirm email';
-  }
-  confirmPhone() {
-    return 'confirm phone';
+
+  async signIn(SignInData: SignInData): Promise<AuthResult> {
+    const tokenPayload = {
+      sub: SignInData.userId,
+      username: SignInData.username,
+    };
+    const resToken = await this.jwtService.signAsync(tokenPayload);
+    return {
+      accessToken: resToken,
+      userId: SignInData.userId,
+      username: SignInData.username,
+    };
   }
 }

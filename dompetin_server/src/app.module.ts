@@ -8,6 +8,7 @@ import { UserSettingModule } from './user_setting/user_setting.module';
 import { MTrasactionCategoryModule } from './m_trasaction_category/m_trasaction_category.module';
 import { TTransactionModule } from './t_transaction/t_transaction.module';
 import { AuthModule } from './auth/auth.module';
+import { Auth2Module } from './auth2/auth2.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './auth/auth.module';
     MTrasactionCategoryModule,
     TTransactionModule,
     AuthModule,
+    Auth2Module,
   ],
   controllers: [AppController],
   providers: [AppService],

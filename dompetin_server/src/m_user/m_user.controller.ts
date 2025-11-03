@@ -12,12 +12,13 @@ import { MUserService } from './m_user.service';
 import { CreateMUserDto } from './dto/create-m_user.dto';
 import { UpdateMUserDto } from './dto/update-m_user.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { LocalStrategyGuard } from 'src/auth2/guards/local-strategy.guard';
 
 @Controller('api/m-user')
 export class MUserController {
   constructor(private readonly mUserService: MUserService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(LocalStrategyGuard)
   @Post()
   create(@Body() createMUserDto: CreateMUserDto) {
     return this.mUserService.create(createMUserDto);
