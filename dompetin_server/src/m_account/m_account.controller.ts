@@ -11,7 +11,7 @@ import {
 import { MAccountService } from './m_account.service';
 import { CreateMAccountDto } from './dto/create-m_account.dto';
 import { UpdateMAccountDto } from './dto/update-m_account.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth2.guard';
 import {
   responseHelper,
   responseStatus,

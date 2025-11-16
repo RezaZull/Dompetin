@@ -11,7 +11,8 @@ import {
 import { MTrasactionCategoryService } from './m_trasaction_category.service';
 import { CreateMTrasactionCategoryDto } from './dto/create-m_trasaction_category.dto';
 import { UpdateMTrasactionCategoryDto } from './dto/update-m_trasaction_category.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth2.guard';
+
 
 @Controller('api/tras-category')
 export class MTrasactionCategoryController {

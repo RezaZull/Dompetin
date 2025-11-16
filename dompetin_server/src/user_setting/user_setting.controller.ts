@@ -11,7 +11,7 @@ import {
 import { UserSettingService } from './user_setting.service';
 import { CreateUserSettingDto } from './dto/create-user_setting.dto';
 import { UpdateUserSettingDto } from './dto/update-user_setting.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth2.guard';
 
 @Controller('api/user-setting')
 export class UserSettingController {

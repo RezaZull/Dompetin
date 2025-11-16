@@ -11,7 +11,7 @@ import {
 import { TTransactionService } from './t_transaction.service';
 import { CreateTTransactionDto } from './dto/create-t_transaction.dto';
 import { UpdateTTransactionDto } from './dto/update-t_transaction.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
+import { AuthGuard } from 'src/auth/guards/auth2.guard';
 
 @Controller('api/t-transaction')
 export class TTransactionController {

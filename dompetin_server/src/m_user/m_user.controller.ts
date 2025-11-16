@@ -11,8 +11,8 @@ import {
 import { MUserService } from './m_user.service';
 import { CreateMUserDto } from './dto/create-m_user.dto';
 import { UpdateMUserDto } from './dto/update-m_user.dto';
-import { AuthGuard } from 'src/auth/auth.guard';
-import { LocalStrategyGuard } from 'src/auth2/guards/local-strategy.guard';
+import { LocalStrategyGuard } from 'src/auth/guards/local-strategy.guard';
+import { AuthGuard } from 'src/auth/guards/auth2.guard';
 
 @Controller('api/m-user')
 export class MUserController {
